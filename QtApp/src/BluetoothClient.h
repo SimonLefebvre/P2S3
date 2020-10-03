@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QtBluetooth/QBluetoothServiceInfo>
 #include <QtBluetooth/QBluetoothSocket>
+#include "BluetoothData.h"
 
 namespace Bluetooth
 {
-
     class Client : public QObject
     {
         Q_OBJECT
@@ -22,7 +22,7 @@ namespace Bluetooth
     signals:
         void dataReceived(const QByteArray &data);
 
-        void connected();
+        void connected(ClientInformation information);
         void disconnected();
 
     private slots:

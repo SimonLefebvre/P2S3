@@ -1,0 +1,30 @@
+
+QGroupBox{
+    color: #000000;
+    border: 1px solid #666666;
+    background-color: #FFFFFF;
+    border-radius: 10%;
+    margin-top: 0.5em;
+    font-weight: bold;
+}
+
+QGroupBox#StatusGroupBox:disabled {
+    color: #BBB9BB;
+}
+
+QGroupBox::title {
+    top: -0.6em;
+    left: 8px;
+}
+
+QGroupBox#StatusGroupBoxRed{
+    border: 1px solid #BF0F0F;
+    font: 10pt;
+    font-weight: bold;
+}
+
+QGroupBox#StatusGroupBoxGreen{
+    border: 1px solid #40C12C;
+    font: 10pt;
+    font-weight: bold;
+}

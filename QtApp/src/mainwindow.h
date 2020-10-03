@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "BluetoothDeviceFinder.h"
 #include "BluetoothClient.h"
+#include "BluetoothStatusWidget.h"
 #include <QListWidget>
 
 class MainWindow : public QMainWindow
@@ -15,9 +16,13 @@ public:
     ~MainWindow();
 
 private:
+    QVBoxLayout *vLayout;
+
+    QWidget mainWidget;
 
     Bluetooth::DeviceFinder btDeviceFinder;
-    Bluetooth::Client client;
+    Bluetooth::Client btClient;
+    Bluetooth::StatusWidget btWidget;
 
     QListWidget listWidget;
 };

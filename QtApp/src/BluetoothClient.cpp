@@ -1,5 +1,6 @@
 #include "BluetoothClient.h"
 #include <iostream>
+#include <QBluetoothDeviceInfo>
 
 using namespace Bluetooth;
 
@@ -27,18 +28,19 @@ Client::~Client()
 
 void Client::start(const QBluetoothServiceInfo &info)
 {
-    auto info_ = new QBluetoothServiceInfo(info);
     if(socket && socket->isOpen())
         socket->close();
 
     socket = std::make_unique<QBluetoothSocket>(QBluetoothServiceInfo::RfcommProtocol);
 
     connect(socket.get(), &QBluetoothSocket::readyRead, this, &Client::read);
-    connect(socket.get(), &QBluetoothSocket::connected, this, &Client::connected);
+    connect(socket.get(), &QBluetoothSocket::connected, [&]{
+        emit connected({info.device().name(), info.device().address().toString(), info.device().rssi()});
+    });
     connect(socket.get(), &QBluetoothSocket::disconnected, this, &Client::disconnected);
     connect(socket.get(), &QBluetoothSocket::stateChanged, [&](auto state){
         std::cout << "BT Client state changed: " << clientStateDescriptor.value(state) << std::endl;});
-    socket->connectToService(*info_);
+    socket->connectToService(info);
 }
 
 void Client::read()
