@@ -27,6 +27,7 @@ Client::~Client()
 
 void Client::start(const QBluetoothServiceInfo &info)
 {
+    auto info_ = new QBluetoothServiceInfo(info);
     if(socket && socket->isOpen())
         socket->close();
 
@@ -37,7 +38,7 @@ void Client::start(const QBluetoothServiceInfo &info)
     connect(socket.get(), &QBluetoothSocket::disconnected, this, &Client::disconnected);
     connect(socket.get(), &QBluetoothSocket::stateChanged, [&](auto state){
         std::cout << "BT Client state changed: " << clientStateDescriptor.value(state) << std::endl;});
-    socket->connectToService(info);
+    socket->connectToService(*info_);
 }
 
 void Client::read()

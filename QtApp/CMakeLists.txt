@@ -27,7 +27,7 @@ file(COPY ${QT_DEPENDENCIES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 set(QT5_PLUGINS Core Gui Widgets Bluetooth)
 find_package(Qt5 COMPONENTS ${QT5_PLUGINS} REQUIRED)
 
-add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SRC} ${project_sources_moc})
+add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SRC})
 
 foreach(plugin ${QT5_PLUGINS})
     target_link_libraries(${PROJECT_NAME} Qt5::${plugin})

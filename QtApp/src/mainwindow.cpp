@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
         client.start(info);
     });
 
-    btDeviceFinder.search("Jabra Elite 75t", 3000);
+    btDeviceFinder.search("Jabra Elite 75t", 20000);
 }
 
 MainWindow::~MainWindow()

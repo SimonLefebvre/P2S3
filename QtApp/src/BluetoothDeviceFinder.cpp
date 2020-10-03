@@ -5,33 +5,40 @@
 using namespace Bluetooth;
 
 DeviceFinder::DeviceFinder(QObject *parent) :
-    QObject(parent)
-{}
+    QObject(parent),
+    agent(std::make_unique<QBluetoothServiceDiscoveryAgent>())
+{
+    connect(agent.get(), &QBluetoothServiceDiscoveryAgent::serviceDiscovered,this, &DeviceFinder::onDiscovery);
+}
 
 void DeviceFinder::search(QString deviceName, int32_t timeOutMs)
 {
-    queries.emplace_back(deviceName);
-    auto& query = queries.back();
-    connect(query.agent.get(), &QBluetoothServiceDiscoveryAgent::serviceDiscovered,this, &DeviceFinder::discovered);
+    for(auto &it : agent->discoveredServices()){
+        if(it.device().name() == deviceName) {
+            emit serviceAvailable(it);
+            return;
+        }
+    }
+    pending.append(deviceName);
 
     if(timeOutMs > 0){
-        QTimer::singleShot(timeOutMs, [&] {
-            std::cout << "Device \"" << query.deviceName.toStdString() << "\" was not serviceAvailable." << std::endl;
-            queries.remove(query);
+        QTimer::singleShot(timeOutMs, [&, deviceName] {
+            if(pending.contains(deviceName)){
+                std::cout << "Device \"" << deviceName.toStdString() << "\" was not found." << std::endl;
+                pending.removeOne(deviceName);
+            }
         });
     }
-    query.agent->start();
+    agent->start();
 }
 
-void DeviceFinder::discovered(const QBluetoothServiceInfo &info)
+void DeviceFinder::onDiscovery(const QBluetoothServiceInfo &info)
 {
-    if(queries.erase(std::find(queries.begin(), queries.end(), info.device().name())) != queries.end()){
-        std::cout << "Device \"" << info.device().name().toStdString() << "\" serviceAvailable." << std::endl;
-        emit serviceAvailable(info);
+    for(auto it : pending){
+        if(it == info.device().name()){
+            std::cout << "Device \"" << it.toStdString() << "\" found." << std::endl;
+            emit serviceAvailable(info);
+            pending.removeOne(it);
+        }
     }
 }
-
-DeviceFinder::Query::Query(QString deviceName) :
-    deviceName(deviceName),
-    agent(std::make_unique<QBluetoothServiceDiscoveryAgent>())
-{}

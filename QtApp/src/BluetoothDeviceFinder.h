@@ -21,19 +21,12 @@ namespace Bluetooth
         void serviceAvailable(const QBluetoothServiceInfo &devInfo);
 
     private slots:
-        void discovered(const QBluetoothServiceInfo &devInfo);
+        void onDiscovery(const QBluetoothServiceInfo &info);
 
     private:
-        struct Query
-        {
-            Query(QString deviceName);
-            std::unique_ptr<QBluetoothServiceDiscoveryAgent> agent;
-            QString deviceName;
-            bool operator==(const Query& rhs){ return deviceName == rhs.deviceName; }
-            bool operator==(const QString& rhs){ return deviceName == rhs; }
-        };
+        std::unique_ptr<QBluetoothServiceDiscoveryAgent> agent;
 
-        std::list<Query> queries;
+        QList<QString> pending;
     };
 }
 
