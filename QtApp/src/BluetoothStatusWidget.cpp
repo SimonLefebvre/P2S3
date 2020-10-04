@@ -9,7 +9,7 @@
 using namespace Bluetooth;
 
 StatusWidget::StatusWidget(QWidget *parent) :
-        QGroupBox("Connexion Bluetooth"),
+        QGroupBox("Connexion Bluetooth", parent),
         hLayout(new QHBoxLayout()),
         iconsHLayout(new QHBoxLayout()),
         textVLayout(new QVBoxLayout()),

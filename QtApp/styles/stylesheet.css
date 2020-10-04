@@ -4,7 +4,7 @@ QGroupBox{
     border: 1px solid #666666;
     background-color: #FFFFFF;
     border-radius: 10%;
-    margin-top: 0.5em;
+    margin-top: 0.8em;
     font-weight: bold;
 }
 
@@ -13,19 +13,19 @@ QGroupBox#StatusGroupBox:disabled {
 }
 
 QGroupBox::title {
-    top: -1.5em;
+    top: -1.25em;
     left: 8px;
 }
 
 QGroupBox#StatusGroupBoxRed{
     border: 1px solid #BF0F0F;
-    font: 10pt;
+    font: 8pt;
     font-weight: bold;
 }
 
 QGroupBox#StatusGroupBoxGreen{
     border: 1px solid #40C12C;
-    font: 10pt;
+    font: 8pt;
     font-weight: bold;
 }
 

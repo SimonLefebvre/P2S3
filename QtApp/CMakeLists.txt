@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.1.0)
 
 set(PROJECT_NAME QtApp)
+set(OUTPUT_NAME BikUS)
 
 project(${PROJECT_NAME})
 
@@ -20,8 +21,6 @@ include_directories(${PROJECT_HEADER})
 file(GLOB QT_DEPENDENCIES "qt_dependencies/*")
 file(COPY ${QT_DEPENDENCIES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-file(COPY styles DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
 set(QT5_PLUGINS Core Gui Widgets Bluetooth)
 find_package(Qt5 COMPONENTS ${QT5_PLUGINS} REQUIRED)
 
@@ -34,5 +33,13 @@ endforeach()
 
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME BikUS CXX_STANDARD 20)
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME} CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
+
+add_custom_target(resources ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles
+        ${CMAKE_CURRENT_BINARY_DIR}/styles)
+
+add_dependencies(${PROJECT_NAME} resources)
+
