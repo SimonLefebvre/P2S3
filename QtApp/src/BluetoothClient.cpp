@@ -34,7 +34,7 @@ void Client::start(const QBluetoothServiceInfo &info)
     socket = std::make_unique<QBluetoothSocket>(QBluetoothServiceInfo::RfcommProtocol);
 
     connect(socket.get(), &QBluetoothSocket::readyRead, this, &Client::read);
-    connect(socket.get(), &QBluetoothSocket::connected, [&]{
+    connect(socket.get(), &QBluetoothSocket::connected, [=]{
         emit connected({info.device().name(), info.device().address().toString(), info.device().rssi()});
     });
     connect(socket.get(), &QBluetoothSocket::disconnected, this, &Client::disconnected);

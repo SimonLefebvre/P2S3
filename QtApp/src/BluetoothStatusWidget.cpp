@@ -3,6 +3,8 @@
 //
 
 #include "BluetoothStatusWidget.h"
+#include <QStyle>
+#include <iostream>
 
 using namespace Bluetooth;
 
@@ -25,36 +27,37 @@ StatusWidget::StatusWidget(QWidget *parent) :
     iconsHLayout->addWidget(&downloadIcon);
     iconsHLayout->addWidget(&uploadIcon);
 
-    downloadTimer.setInterval(1000);
-    uploadTimer.setInterval(1000);
     connect(&downloadTimer, &QTimer::timeout, [&]{ showDownload(false); });
-    connect(&uploadTimer, &QTimer::timeout, [&]{ showDownload(true); });
+    connect(&uploadTimer, &QTimer::timeout, [&]{ showUpload(false); });
 
     setDisconnected();
-    this->setFixedSize(200, 100);
 }
 
 void StatusWidget::setConnected(ClientInformation clientInfo)
 {
     setObjectName("StatusGroupBoxGreen");
-    setStyleSheet(this->styleSheet());
+    style()->unpolish(this);
+    style()->polish(this);
 
     nameLabel.setText(clientInfo.name);
     addressLabel.setText(clientInfo.address);
-    // TODO: set signal strength icon
-
 }
 
 void StatusWidget::setDisconnected()
 {
     setObjectName("StatusGroupBoxRed");
-    setStyleSheet(this->styleSheet());
+    style()->unpolish(this);
+    style()->polish(this);
+
+    nameLabel.setText("Not connected");
+    addressLabel.setText("");
 }
 
 void StatusWidget::showUpload(bool active)
 {
     if(active){
         //uploadIcon.setPixmap();
+        uploadTimer.start(1000);
     }
     else{
 
@@ -65,6 +68,7 @@ void Bluetooth::StatusWidget::showDownload(bool active)
 {
     if(active){
         //downloadIcon.setPixmap();
+        downloadTimer.start(1000);
     }
     else{
 

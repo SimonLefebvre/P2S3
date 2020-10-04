@@ -13,7 +13,7 @@ QGroupBox#StatusGroupBox:disabled {
 }
 
 QGroupBox::title {
-    top: -0.6em;
+    top: -1.5em;
     left: 8px;
 }
 
@@ -27,4 +27,8 @@ QGroupBox#StatusGroupBoxGreen{
     border: 1px solid #40C12C;
     font: 10pt;
     font-weight: bold;
+}
+
+QLabel {
+    font: 9pt;
 }
