@@ -1,5 +1,4 @@
-#include <Arduino.h>
-#include <BluetoothSerial.h>
+#include <MyEspInclude.h>
 
 BluetoothSerial BT;
 void setup() {
@@ -7,6 +6,14 @@ void setup() {
   BT.begin("Myesp32");
   Serial.begin(9600);
   Serial.println("Bt started");
+
+  SSD1306 display(0x3c,5,4);
+  //display.init();
+  //display.setFont(ArialMT_Plain_10);
+  //display.setTextAlignment(TEXT_ALIGN_LEFT);
+  //display.drawStringMaxWidth(0, 0, 128,
+  //    "ma name a jeff" );
+  Serial.println("Display started");
 }
 
 void loop() {
