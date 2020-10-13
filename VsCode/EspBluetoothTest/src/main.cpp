@@ -1,18 +1,19 @@
 #include <MyEspInclude.h>
 
 BluetoothSerial BT;
+SSD1306 display(0x3c,5,4);
 void setup() {
   // put your setup code here, to run once:
   BT.begin("Myesp32");
   Serial.begin(9600);
   Serial.println("Bt started");
-
-  SSD1306 display(0x3c,5,4);
-  //display.init();
-  //display.setFont(ArialMT_Plain_10);
-  //display.setTextAlignment(TEXT_ALIGN_LEFT);
-  //display.drawStringMaxWidth(0, 0, 128,
-  //    "ma name a jeff" );
+  display.init();
+  display.setFont(ArialMT_Plain_16);
+  display.setTextAlignment(TEXT_ALIGN_LEFT);
+  //display.setLogBuffer(5, 30);
+  display.drawStringMaxWidth(0, 0, 128,
+      "ma name a jeff" );
+  display.display();
   Serial.println("Display started");
 }
 
