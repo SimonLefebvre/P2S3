@@ -13,7 +13,6 @@ namespace Bluetooth
     {
         QString name;
         QString address;
-        int16_t rssi;
     };
 }
 

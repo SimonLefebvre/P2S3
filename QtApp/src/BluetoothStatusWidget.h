@@ -40,7 +40,6 @@ namespace Bluetooth
 
         QLabel nameLabel;
         QLabel addressLabel;
-        QLabel signalStrengthIcon;
         QLabel uploadIcon;
         QLabel downloadIcon;
     };

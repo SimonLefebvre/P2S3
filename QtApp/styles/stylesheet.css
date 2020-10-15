@@ -13,7 +13,7 @@ QGroupBox#StatusGroupBox:disabled {
 }
 
 QGroupBox::title {
-    top: -1.25em;
+    top: -0.7em;
     left: 8px;
 }
 

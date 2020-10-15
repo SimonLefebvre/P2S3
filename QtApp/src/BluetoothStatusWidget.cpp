@@ -22,7 +22,6 @@ StatusWidget::StatusWidget(QWidget *parent) :
     textVLayout->addWidget(&nameLabel);
     textVLayout->addWidget(&addressLabel);
 
-    iconsVLayout->addWidget(&signalStrengthIcon);
     iconsVLayout->addLayout(iconsHLayout);
     iconsHLayout->addWidget(&downloadIcon);
     iconsHLayout->addWidget(&uploadIcon);

@@ -16,6 +16,7 @@ namespace Bluetooth
         ~Client();
 
         void start(const QBluetoothServiceInfo &info);
+        void start(const QString &address, uint16_t port);
 
         void sendData(const QByteArray &data);
 
@@ -30,6 +31,8 @@ namespace Bluetooth
         void read();
 
     private:
+        void createSocket();
+
         std::unique_ptr<QBluetoothSocket> socket;
     };
 
