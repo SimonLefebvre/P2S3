@@ -31,7 +31,9 @@ void setup() {
   Serial.println("PWM started");
 
 //****BLE***
-  BLE_init();
+  BLE_init1();
+  //BLE_init2();
+  Serial.println("BLE started");
 }
 
 void loop() {

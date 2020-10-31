@@ -9,6 +9,6 @@
 #include <BLEServer.h>
 
 
-void BLE_init(void);
-
+void BLE_init1(void);
+void BLE_init2(void);
 #endif
