@@ -38,7 +38,7 @@ while(1)
     //39  Buck Voltage
     Values.VitesseMoteur = analogRead(2);
     Values.TensionGenerateur = analogRead(12);
-    Values.VitesseMoteur = analogRead(13);
+    Values.VitesseGenerateur = analogRead(13);
     Values.TempGenerateur = analogRead(15);
     Values.TempMoteur = analogRead(25);
     Values.Current = analogRead(36);
