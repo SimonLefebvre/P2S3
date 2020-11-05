@@ -17,6 +17,7 @@ myValues::myValues(void)
     FreqGenerateur = 0;
     PWMMoteur = 0;
     PWMGenerateur = 0;
+    Current = 0;
 }
 myValues::myValues(int* info, int* ADC, int* PWM)
 {
@@ -27,7 +28,8 @@ myValues::myValues(int* info, int* ADC, int* PWM)
     VitesseMoteur = ADC[2];
     VitesseGenerateur = ADC[3];
     TensionMoteur = ADC[4];
-    TensionGenerateur = ADC[4];
+    TensionGenerateur = ADC[5];
+    Current = ADC[6];
     FreqMoteur = PWM[0];
     FreqGenerateur = PWM[1];
     PWMMoteur = PWM[2];

@@ -28,6 +28,7 @@ class myValues
     int FreqGenerateur;
     int PWMMoteur;
     int PWMGenerateur;
+    int Current;
 };
 
 class myBLE
