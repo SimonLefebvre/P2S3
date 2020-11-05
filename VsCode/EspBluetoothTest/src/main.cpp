@@ -3,7 +3,7 @@
 void setup() {
   // put your setup code here, to run once:
 
-  Serial.begin(9600);
+  Serial.begin(115200);
 
  
   //ledcAttachPin(16,0);//ledcAttachPin(gpio, channel)
@@ -17,7 +17,7 @@ void setup() {
 void loop() 
 {
   myValues Values;
-  Display Display(0,&Values);
+  Display Display;
   int Displaycpt=0;
   int DisplayChangeDelay=0;
 while(1)
@@ -42,19 +42,16 @@ while(1)
     Values.TempGenerateur = analogRead(15);
     Values.TempMoteur = analogRead(25);
     Values.Current = analogRead(36);
-    Values.TempMoteur = analogRead(39);
+    Values.TensionMoteur = analogRead(39);
     delay(2);
   }
   DisplayChangeDelay ++;
   Display.Update(Displaycpt,&Values);
-  Serial.print("\r");
-  Serial.print(DisplayChangeDelay);
   if(DisplayChangeDelay >100)
   {
     DisplayChangeDelay =0;
     Displaycpt ++;
     if(Displaycpt >2)Displaycpt=0;
-    Serial.println("Display change");
   }
 
 }

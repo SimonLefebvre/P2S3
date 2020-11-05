@@ -46,10 +46,10 @@ class myBLE
 
 class Display
 {
-
+    private:
+    int currentmode;
     public:
     Display(void);
-    Display(int mode, myValues* Values);
     void Update(int mode, myValues* Values);
 };
 #endif

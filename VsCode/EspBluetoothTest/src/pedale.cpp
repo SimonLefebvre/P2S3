@@ -44,69 +44,118 @@ Display::Display(void)
   display.setFont(ArialMT_Plain_16);
   display.setTextAlignment(TEXT_ALIGN_LEFT);
   //display.setLogBuffer(5, 30);
-  display.drawStringMaxWidth(0, 0, 128,"U Moteur 24V" );
-  display.drawStringMaxWidth(0, 16, 128,"U Gene 80V" );
-  display.drawStringMaxWidth(0, 32, 128,"T Moteur 20C" );
-  display.drawStringMaxWidth(0, 48, 128,"T Gene 80C" );
+        display.resetDisplay();
+        display.drawStringMaxWidth(0, 0, 128, "U Mote");
+        display.drawStringMaxWidth(0, 16, 128,"U Gene" );
+        display.drawStringMaxWidth(0, 32, 128,"T Mote" );
+        display.drawStringMaxWidth(0, 48, 128,"T Gene" );
+
+        display.drawStringMaxWidth(93, 0, 128, "V");
+        display.drawStringMaxWidth(93, 16, 128,"V" );
+        display.drawStringMaxWidth(93, 32, 128,"C" );
+        display.drawStringMaxWidth(93, 48, 128,"C" );
   display.display();
   Serial.println("Display started");
+  currentmode = 0;
 }
-Display::Display(int mode, myValues* Values)
-{
-  display.init();
-  display.setFont(ArialMT_Plain_16);
-  display.setTextAlignment(TEXT_ALIGN_LEFT);
 
-
-
-  switch(mode)
-  {
-      case 0:
-        display.drawStringMaxWidth(0, 0, 128,"U Moteur "+String(Values->TensionMoteur)+"V" );
-        display.drawStringMaxWidth(0, 16, 128,"U Gene "+String(Values->TensionGenerateur)+"V" );
-        display.drawStringMaxWidth(0, 32, 128,"T Moteur "+String(Values->TempMoteur)+"C" );
-        display.drawStringMaxWidth(0, 48, 128,"T Gene "+String(Values->TempGenerateur)+"C" );
-break;
-      case 1:
-        display.drawStringMaxWidth(0, 0, 128,"S Moteur "+String(Values->VitesseMoteur)+"R" );
-        display.drawStringMaxWidth(0, 16, 128,"U Moteur "+String(Values->TensionMoteur)+"V" );
-        display.drawStringMaxWidth(0, 32, 128,"P Moteur "+String(Values->PWMMoteur)+"%" );
-        display.drawStringMaxWidth(0, 48, 128,"F Moteur "+String(Values->FreqMoteur)+"Hz" );
-break;
-      case 2:
-        display.drawStringMaxWidth(0, 0, 128,"S Gene "+String(Values->VitesseGenerateur)+"R" );
-        display.drawStringMaxWidth(0, 16, 128,"U Gene "+String(Values->TensionGenerateur)+"V" );
-        display.drawStringMaxWidth(0, 32, 128,"P Gene "+String(Values->PWMGenerateur)+"%" );
-        display.drawStringMaxWidth(0, 48, 128,"F Gene "+String(Values->FreqGenerateur)+"Hz" );
-  }
-  
-  display.display();
-  Serial.println("Display started");
-}
 void Display::Update(int mode, myValues* Values)
 {
-    display.resetDisplay();
+    
 
   switch(mode)
   {
       case 0:
-        display.drawStringMaxWidth(0, 0, 128,"U Moteur "+String(Values->TensionMoteur)+"V" );
-        display.drawStringMaxWidth(0, 16, 128,"U Gene "+String(Values->TensionGenerateur)+"V" );
-        display.drawStringMaxWidth(0, 32, 128,"T Moteur "+String(Values->TempMoteur)+"C" );
-        display.drawStringMaxWidth(0, 48, 128,"T Gene "+String(Values->TempGenerateur)+"C" );
+
+      if(currentmode != mode)
+      {
+        display.resetDisplay();
+        display.drawStringMaxWidth(0, 0, 128, "U Mote");
+        display.drawStringMaxWidth(0, 16, 128,"U Gene" );
+        display.drawStringMaxWidth(0, 32, 128,"T Mote" );
+        display.drawStringMaxWidth(0, 48, 128,"T Gene" );
+
+        display.drawStringMaxWidth(93, 0, 128, "V");
+        display.drawStringMaxWidth(93, 16, 128,"V" );
+        display.drawStringMaxWidth(93, 32, 128,"C" );
+        display.drawStringMaxWidth(93, 48, 128,"C" );
+      }
+      
+      else
+      {
+        for(int y=0;y<63;y++)
+        {
+          for(int x = 55;x<90;x++)
+          {
+            display.clearPixel(x,y);
+          }
+        }
+      }
+        display.drawStringMaxWidth(55, 0, 128,String(Values->TensionMoteur) );
+        display.drawStringMaxWidth(55, 16, 128,String(Values->TensionGenerateur));
+        display.drawStringMaxWidth(55, 32, 128,String(Values->TempMoteur));
+        display.drawStringMaxWidth(55, 48, 128,String(Values->TempGenerateur));
 break;
       case 1:
-        display.drawStringMaxWidth(0, 0, 128,"S Moteur "+String(Values->VitesseMoteur)+"R" );
-        display.drawStringMaxWidth(0, 16, 128,"U Moteur "+String(Values->TensionMoteur)+"V" );
-        display.drawStringMaxWidth(0, 32, 128,"P Moteur "+String(Values->PWMMoteur)+"%" );
-        display.drawStringMaxWidth(0, 48, 128,"F Moteur "+String(Values->FreqMoteur)+"Hz" );
+      if(currentmode != mode)
+      {
+        display.resetDisplay();
+        display.drawStringMaxWidth(0, 0, 128,"S Mote" );
+        display.drawStringMaxWidth(0, 16, 128,"U Mote" );
+        display.drawStringMaxWidth(0, 32, 128,"P Mote" );
+        display.drawStringMaxWidth(0, 48, 128,"F Mote" );
+
+        display.drawStringMaxWidth(93, 0, 128, "RPM");
+        display.drawStringMaxWidth(93, 16, 128,"V" );
+        display.drawStringMaxWidth(93, 32, 128,"%" );
+        display.drawStringMaxWidth(93, 48, 128,"HZ" );
+      }
+      else
+      {
+        for(int y=0;y<63;y++)
+        {
+          for(int x = 55;x<90;x++)
+          {
+            display.clearPixel(x,y);
+          }
+        }
+      }
+        display.drawStringMaxWidth(55, 0, 128,String(Values->VitesseMoteur));
+        display.drawStringMaxWidth(55, 16, 128,String(Values->TensionMoteur));
+        display.drawStringMaxWidth(55, 32, 128,String(Values->PWMMoteur));
+        display.drawStringMaxWidth(55, 48, 128,String(Values->FreqMoteur) );
+      
 break;
       case 2:
-        display.drawStringMaxWidth(0, 0, 128,"S Gene "+String(Values->VitesseGenerateur)+"R" );
-        display.drawStringMaxWidth(0, 16, 128,"U Gene "+String(Values->TensionGenerateur)+"V" );
-        display.drawStringMaxWidth(0, 32, 128,"P Gene "+String(Values->PWMGenerateur)+"%" );
-        display.drawStringMaxWidth(0, 48, 128,"F Gene "+String(Values->FreqGenerateur)+"Hz" );
+      if(currentmode != mode)
+      {
+        display.resetDisplay();
+        display.drawStringMaxWidth(0, 0, 128,"S Gene");
+        display.drawStringMaxWidth(0, 16, 128,"U Gene" );
+        display.drawStringMaxWidth(0, 32, 128,"P Gene" );
+        display.drawStringMaxWidth(0, 48, 128,"F Gene" );
+
+        display.drawStringMaxWidth(93, 0, 128, "RPM");
+        display.drawStringMaxWidth(93, 16, 128,"V" );
+        display.drawStringMaxWidth(93, 32, 128,"%" );
+        display.drawStringMaxWidth(93, 48, 128,"HZ" );
+      }
+      else
+      {
+        for(int y=0;y<63;y++)
+        {
+          for(int x = 55;x<90;x++)
+          {
+            display.clearPixel(x,y);
+          }
+        }
+      }
+        display.drawStringMaxWidth(55, 0, 128,String(Values->VitesseGenerateur));
+        display.drawStringMaxWidth(55, 16, 128,String(Values->TensionGenerateur));
+        display.drawStringMaxWidth(55, 32, 128,String(Values->PWMGenerateur));
+        display.drawStringMaxWidth(55, 48, 128,String(Values->FreqGenerateur));
+        break;
   }
-  
+  currentmode = mode;
   display.display();
 }
