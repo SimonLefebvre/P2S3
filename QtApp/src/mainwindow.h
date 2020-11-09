@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "BluetoothDeviceFinder.h"
-#include "BluetoothClient.h"
-#include "BluetoothStatusWidget.h"
+#include <QVBoxLayout>
+
+#include "CircularGaugeWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -19,8 +19,7 @@ private:
 
     QWidget mainWidget;
 
-    Bluetooth::DeviceFinder btDeviceFinder;
-    Bluetooth::Client btClient;
-    Bluetooth::StatusWidget btWidget;
+    CircularGaugeWidget rpmWidget;
+
 };
 #endif // MAINWINDOW_H
