@@ -21,7 +21,9 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    void adjustFontSize(QString strToFit, uint16_t pixelSpace);
 
+    QFont font = {"Bookman Old Style", 4, QFont::Bold};
     const QColor needleColor = {5, 8, 33};
     const uint16_t numberOfTicks = 12;
     const uint32_t maxValue = 4400;

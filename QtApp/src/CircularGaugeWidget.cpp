@@ -14,11 +14,7 @@ CircularGaugeWidget::CircularGaugeWidget(QString name, uint32_t maxValue, QWidge
     name(name),
     maxValue(maxValue)
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, QOverload<>::of(&CircularGaugeWidget::update));
-    timer->start(1000);
 
-    this->setBaseSize(255, 200);
 }
 
 void CircularGaugeWidget::paintEvent(QPaintEvent *)
@@ -31,8 +27,12 @@ void CircularGaugeWidget::paintEvent(QPaintEvent *)
 
     double scaleRatio = (width() * 0.5 < height() * 0.68) ? width() / 1.36 : height();
 
+    adjustFontSize(QString::number(maxValue), 38);
+
     QPainter p(this);
-    p.setFont(QFont("Bookman Old Style", 4, QFont::Bold));
+    p.setFont(font);
+    QFontMetrics fm(p.font());
+
     p.setRenderHint(QPainter::Antialiasing);
     p.translate(width() * 0.5, height() * 0.68);
     p.scale(scaleRatio / 210.0, scaleRatio / 210.0);
@@ -50,11 +50,12 @@ void CircularGaugeWidget::paintEvent(QPaintEvent *)
         if(i % (240 / numberOfTicks) == 0) {
             if (i <= 90 || i >= 330) {  // Draw numbers left side of quadrant
                 p.setPen(Qt::black);
-                p.drawText(-130, 4, QString::number(((i + 20) % 360) * adjustedMax / 240));
+                p.drawText(-(100 + fm.horizontalAdvance(QString::number(((i + 20) % 360) * adjustedMax / 240))), fm.ascent() / 2,
+                           QString::number(((i + 20) % 360) * adjustedMax / 240));
             }
             if (i < 30 || i > 270) {    // Draw numbers right side of quadrant
                 p.setPen(Qt::black);
-                p.drawText(100, 4, QString::number(((i + 200) % 360) * adjustedMax / 240));
+                p.drawText(100, fm.ascent() / 2, QString::number(((i + 200) % 360) * adjustedMax / 240));
             }
             if (i < 30 || i >= 150) {   // Draw major tick lines
                 p.setPen(QColor(142, 11, 11));
@@ -68,8 +69,6 @@ void CircularGaugeWidget::paintEvent(QPaintEvent *)
         p.rotate(1);
     }
 
-    QFontMetrics fm(p.font());
-
     p.setPen(needleColor);
     p.drawText(-fm.horizontalAdvance(name) / 2, 50, name);
     p.setBrush(QColor(0, 0, 0, 0));
@@ -78,5 +77,21 @@ void CircularGaugeWidget::paintEvent(QPaintEvent *)
 
 void CircularGaugeWidget::setNeedle(uint32_t value)
 {
-    needleAngle = (value * 360 / maxValue) - 110;
+    needleAngle = (static_cast<float>(value * 360) / maxValue) - 110;
+    this->update();
+}
+
+void CircularGaugeWidget::adjustFontSize(QString strToFit, uint16_t pixelSpace)
+{
+    for(;;)
+    {
+        QFontMetrics fm(font);
+        if(fm.horizontalAdvance(strToFit) < pixelSpace && font.pointSize() < 10) {
+            font.setPointSize(font.pointSize() + 1);
+        }
+        else{
+            font.setPointSize(font.pointSize() - 1);
+            return;
+        }
+    }
 }
