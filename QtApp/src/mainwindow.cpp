@@ -2,15 +2,18 @@
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent):
-    QMainWindow(parent),
-    vLayout(new QVBoxLayout()),
-    rpmWidget("Motor RPM", 4400)
+        QMainWindow(parent),
+        vLayout(new QVBoxLayout()),
+        hLayout(new QHBoxLayout()),
+        motorRpmWidget("Motor RPM", 4400),
+        generatorRpmWidget("Generator RPM", 15400)
 {
-    mainWidget.setLayout(vLayout);
-    vLayout->addWidget(&rpmWidget);
+    mainWidget.setLayout(hLayout);
+    hLayout->addWidget(&motorRpmWidget);
+    hLayout->addWidget(&generatorRpmWidget);
     this->setCentralWidget(&mainWidget);
 
-    this->resize(510, 400);
+    this->resize(1020, 400);
 }
 
 MainWindow::~MainWindow()

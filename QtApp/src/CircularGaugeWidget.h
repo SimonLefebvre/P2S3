@@ -22,10 +22,10 @@ protected:
 
 private:
 
-    QColor hourColor = {5, 8, 33};
-    QString name;
+    const QColor needleColor = {5, 8, 33};
     const uint16_t numberOfTicks = 12;
     const uint32_t maxValue = 4400;
+    const QString name;
 
     float needleAngle = -110.0f;
 };

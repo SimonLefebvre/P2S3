@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QTime>
 #include <QTimer>
+#include <algorithm>
 
 CircularGaugeWidget::CircularGaugeWidget(QString name, uint32_t maxValue, QWidget *parent) :
     QWidget(parent),
@@ -16,59 +17,63 @@ CircularGaugeWidget::CircularGaugeWidget(QString name, uint32_t maxValue, QWidge
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&CircularGaugeWidget::update));
     timer->start(1000);
+
+    this->setBaseSize(255, 200);
 }
 
 void CircularGaugeWidget::paintEvent(QPaintEvent *)
 {
-    static const QPoint needle[3] = {
-            QPoint(4, 0),
-            QPoint(-4, 0),
-            QPoint(0, -95)
+    static const QPoint needlePts[3] = {
+        {4, 0},
+        {-4, 0},
+        {0, -95}
     };
 
-    int side = qMin(width(), height());
-    QTime time = QTime::currentTime();
+    double scaleRatio = (width() * 0.5 < height() * 0.68) ? width() / 1.36 : height();
 
     QPainter p(this);
+    p.setFont(QFont("Bookman Old Style", 4, QFont::Bold));
     p.setRenderHint(QPainter::Antialiasing);
-    p.translate(width() / 2, height() * 0.65);
-    p.scale(side / 210.0, side / 210.0);
+    p.translate(width() * 0.5, height() * 0.68);
+    p.scale(scaleRatio / 210.0, scaleRatio / 210.0);
     p.setPen(QPen(QBrush(), 2, Qt::SolidLine, Qt::RoundCap));
-    p.setBrush(hourColor);
+    p.setBrush(needleColor);
     p.save();
     p.rotate(needleAngle);
-    p.drawConvexPolygon(needle, 3);
+    p.drawConvexPolygon(needlePts, 3);
     p.drawEllipse(QPoint(0, 0), 4, 4);
     p.restore();
-    p.setPen(hourColor);
+    p.setPen(needleColor);
 
     int adjustedMax = maxValue * numberOfTicks / (numberOfTicks - 1);
     for (int i = 0; i < 360; i ++) {
         if(i % (240 / numberOfTicks) == 0) {
-            if (i <= 90 || i >= 330) {
+            if (i <= 90 || i >= 330) {  // Draw numbers left side of quadrant
                 p.setPen(Qt::black);
-                p.drawText(-124, 4, QString::number(((i + 20) % 360) * adjustedMax / 240));
+                p.drawText(-130, 4, QString::number(((i + 20) % 360) * adjustedMax / 240));
             }
-            if (i < 30 || i > 270) {
+            if (i < 30 || i > 270) {    // Draw numbers right side of quadrant
                 p.setPen(Qt::black);
                 p.drawText(100, 4, QString::number(((i + 200) % 360) * adjustedMax / 240));
             }
-            if (i < 30 || i >= 150) {
+            if (i < 30 || i >= 150) {   // Draw major tick lines
                 p.setPen(QColor(142, 11, 11));
                 p.drawLine(88, 0, 96, 0);
             }
         }
-        if((i < 20 || i >= 160) && i % (240 / (numberOfTicks * 5)) == 0 && i % (240 / numberOfTicks)){
+        else if((i < 20 || i >= 160) && i % (240 / (numberOfTicks * 5)) == 0){ // Draw minor tick lines
             p.setPen(QColor(0x3F, 0x3F, 0x3F));
             p.drawLine(88, 0, 92, 0);
         }
         p.rotate(1);
     }
 
-    p.setPen(QColor(0x3F, 0x3F, 0x3F));
-    p.drawText(-25, 50, name);
+    QFontMetrics fm(p.font());
+
+    p.setPen(needleColor);
+    p.drawText(-fm.horizontalAdvance(name) / 2, 50, name);
     p.setBrush(QColor(0, 0, 0, 0));
-    p.drawChord(-135, -135, 135 * 2, 135 * 2, -30 * 16, 240 * 16);
+    p.drawChord(-140, -140, 140 * 2, 140 * 2, -28 * 16, 236 * 16);
 }
 
 void CircularGaugeWidget::setNeedle(uint32_t value)

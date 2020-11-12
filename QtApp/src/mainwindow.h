@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "CircularGaugeWidget.h"
 
@@ -16,10 +17,12 @@ public:
 
 private:
     QVBoxLayout *vLayout;
+    QHBoxLayout *hLayout;
 
     QWidget mainWidget;
 
-    CircularGaugeWidget rpmWidget;
+    CircularGaugeWidget motorRpmWidget;
+    CircularGaugeWidget generatorRpmWidget;
 
 };
 #endif // MAINWINDOW_H
