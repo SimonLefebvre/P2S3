@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent):
     this->setCentralWidget(&mainWidget);
 
     this->resize(1020, 400);
+
+    motorRpmWidget.setValue(400);
 }
 
 MainWindow::~MainWindow()

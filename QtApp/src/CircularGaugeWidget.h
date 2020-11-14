@@ -7,18 +7,26 @@
 
 #include <QWidget>
 #include <QColor>
+#include <QVariantAnimation>
 
 class CircularGaugeWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     CircularGaugeWidget(QString name, uint32_t maxValue,  QWidget *parent = nullptr);
 
-    void setNeedle(uint32_t value);
+    void setValue(uint32_t value);
+
+signals:
+
+    void valueChanged(uint32_t value);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+
+private slots:
+
+    void setNeedle(uint32_t value);
 
 private:
     void adjustFontSize(QString strToFit, uint16_t pixelSpace);
@@ -29,6 +37,9 @@ private:
     const uint32_t maxValue = 4400;
     const QString name;
 
+    std::unique_ptr<QVariantAnimation> animation;
+
+    uint32_t currentValue = 0;
     float needleAngle = -110.0f;
 };
 

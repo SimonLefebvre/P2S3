@@ -5,16 +5,17 @@
 #include "CircularGaugeWidget.h"
 
 #include <QPainter>
-#include <QTime>
-#include <QTimer>
-#include <algorithm>
 
 CircularGaugeWidget::CircularGaugeWidget(QString name, uint32_t maxValue, QWidget *parent) :
     QWidget(parent),
     name(name),
-    maxValue(maxValue)
+    maxValue(maxValue),
+    animation(std::make_unique<QVariantAnimation>())
 {
+    animation->setEasingCurve(QEasingCurve(QEasingCurve::Type::InOutCubic));
 
+    connect(animation.get(), &QVariantAnimation::valueChanged,
+            [&](QVariant value){ setNeedle(value.toUInt());});
 }
 
 void CircularGaugeWidget::paintEvent(QPaintEvent *)
@@ -75,10 +76,18 @@ void CircularGaugeWidget::paintEvent(QPaintEvent *)
     p.drawChord(-140, -140, 140 * 2, 140 * 2, -28 * 16, 236 * 16);
 }
 
+void CircularGaugeWidget::setValue(uint32_t value)
+{
+    animation->setDuration(static_cast<int32_t>(value * 1000 / maxValue));
+    animation->setStartValue(currentValue);
+    animation->setEndValue(value);
+    animation->start();
+}
+
 void CircularGaugeWidget::setNeedle(uint32_t value)
 {
-    needleAngle = (static_cast<float>(value * 360) / maxValue) - 110;
-    this->update();
+    needleAngle = ((static_cast<float>(value * 220) / maxValue) - 110);
+    repaint();
 }
 
 void CircularGaugeWidget::adjustFontSize(QString strToFit, uint16_t pixelSpace)
