@@ -8,14 +8,14 @@
 
 CircularGaugeWidget::CircularGaugeWidget(QString name, uint32_t maxValue, QWidget *parent) :
     QWidget(parent),
-    name(name),
+    name(std::move(name)),
     maxValue(maxValue),
     animation(std::make_unique<QVariantAnimation>())
 {
     animation->setEasingCurve(QEasingCurve(QEasingCurve::Type::InOutCubic));
 
     connect(animation.get(), &QVariantAnimation::valueChanged,
-            [&](QVariant value){ setNeedle(value.toUInt());});
+            [&](const QVariant &value){ setNeedle(value.toUInt());});
 }
 
 void CircularGaugeWidget::paintEvent(QPaintEvent *)
@@ -46,17 +46,17 @@ void CircularGaugeWidget::paintEvent(QPaintEvent *)
     p.restore();
     p.setPen(needleColor);
 
-    int adjustedMax = maxValue * numberOfTicks / (numberOfTicks - 1);
+    uint32_t adjustedMax = maxValue * numberOfTicks / (numberOfTicks - 1);
     for (int i = 0; i < 360; i ++) {
         if(i % (240 / numberOfTicks) == 0) {
             if (i <= 90 || i >= 330) {  // Draw numbers left side of quadrant
                 p.setPen(Qt::black);
-                p.drawText(-(100 + fm.horizontalAdvance(QString::number(((i + 20) % 360) * adjustedMax / 240))), fm.ascent() / 2,
+                p.drawText(-(100 + fm.horizontalAdvance(QString::number(((i + 20) % 360) * adjustedMax / 240))), (fm.ascent() / 2) - 1,
                            QString::number(((i + 20) % 360) * adjustedMax / 240));
             }
             if (i < 30 || i > 270) {    // Draw numbers right side of quadrant
                 p.setPen(Qt::black);
-                p.drawText(100, fm.ascent() / 2, QString::number(((i + 200) % 360) * adjustedMax / 240));
+                p.drawText(100, (fm.ascent() / 2) - 1, QString::number(((i + 200) % 360) * adjustedMax / 240));
             }
             if (i < 30 || i >= 150) {   // Draw major tick lines
                 p.setPen(QColor(142, 11, 11));
@@ -86,6 +86,7 @@ void CircularGaugeWidget::setValue(uint32_t value)
 
 void CircularGaugeWidget::setNeedle(uint32_t value)
 {
+    currentValue = value;
     needleAngle = ((static_cast<float>(value * 220) / maxValue) - 110);
     repaint();
 }
