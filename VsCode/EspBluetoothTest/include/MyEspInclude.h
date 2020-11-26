@@ -18,17 +18,18 @@ class myValues
     myValues(int* info, int* ADC, int* PWM);
     int ModeEcran;
     int Status;
-    int TempMoteur;
-    int TempGenerateur;
-    int VitesseMoteur;
-    int VitesseGenerateur;
-    int TensionMoteur;
-    int TensionGenerateur;
+
+    float TempMoteur;
+    float TempGenerateur;
+    float VitesseMoteur;
+    float VitesseGenerateur;
+    float TensionMoteur;
+    float TensionGenerateur;
+    float Current;
     int FreqMoteur;
     int FreqGenerateur;
     int PWMMoteur;
     int PWMGenerateur;
-    int Current;
 };
 
 class myBLE
