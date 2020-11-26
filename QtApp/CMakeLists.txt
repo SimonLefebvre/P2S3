@@ -21,7 +21,7 @@ include_directories(${PROJECT_HEADER})
 file(GLOB QT_DEPENDENCIES "qt_dependencies/*")
 file(COPY ${QT_DEPENDENCIES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-set(QT5_PLUGINS Core Gui Widgets Bluetooth)
+set(QT5_PLUGINS Core Gui Widgets SerialPort)
 find_package(Qt5 COMPONENTS ${QT5_PLUGINS} REQUIRED)
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SRC})
