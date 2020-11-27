@@ -11,6 +11,10 @@
 #include <string.h>
 
 
+#include "Motor.h"
+#include "Generator.h"
+
+
 class myValues
 {
     public:
