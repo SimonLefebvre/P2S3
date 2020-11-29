@@ -2,25 +2,41 @@
 
 void setup() {
   // put your setup code here, to run once:
-
   Serial.begin(115200);
-
-  Motor m;
-  Generator g;
 
 }
 
 void loop() 
 {
+  MyTime t;
+  myValues myValues;
+  myValues.update();
+  Json j;
   Display Display;
   Motor m;
   Generator g;
 
+
   while(1)
   {
-    m.calibrateSpeed();
-    g.calibrateCurrent();
-    delay(10);
+    t.update();
+
+    myValues.update();
+    if(t.Time > t.PidTime)
+    {
+      t.PidTime = t.Time + 10; 
+      m.calibrateSpeed();
+      g.calibrateCurrent();
+    }
+
+
+    if(t.Time > t.DisplayTime)
+    {
+      Display.Update(0,&myValues);
+    }
+
+
+    
 
   }
 }

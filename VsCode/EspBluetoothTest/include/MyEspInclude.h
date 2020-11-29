@@ -19,10 +19,10 @@ class myValues
 {
     public:
     myValues(void);
-    myValues(int* info, int* ADC, int* PWM);
+    void update(void);
+
     int ModeEcran;
     int Status;
-
     float TempMoteur;
     float TempGenerateur;
     float VitesseMoteur;
@@ -56,5 +56,30 @@ class Display
     public:
     Display(void);
     void Update(int mode, myValues* Values);
+};
+
+
+class Json
+{
+    private:
+
+    public:
+
+    Json();
+    void SerialCheck(void);
+    void SerialSend(void);
+};
+
+class MyTime
+{
+    private:
+    public:
+    uint32_t Time;
+    uint32_t PidTime;
+    uint32_t DisplayTime;
+    MyTime(void);
+    void update(void);
+
+
 };
 #endif

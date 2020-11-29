@@ -7,36 +7,32 @@ myValues::myValues(void)
 {
     ModeEcran = 0;
     Status = 0;
-    TempMoteur = 0;
-    TempGenerateur = 0;
-    VitesseMoteur = 0;
-    VitesseGenerateur = 0;
-    TensionMoteur = 0;
-    TensionGenerateur = 0;
+    TempMoteur = 0;         //ADC
+    TempGenerateur = 0;     //ADC
+    VitesseMoteur = 0;      //ADC
+    VitesseGenerateur = 0;  //ADC
+    TensionMoteur = 0;      //ADC
+    TensionGenerateur = 0;  //ADC
     FreqMoteur = 0;
     FreqGenerateur = 0;
     PWMMoteur = 0;
-    PWMGenerateur = 0;
-    Current = 0;
+    PWMGenerateur = 0;    
+    Current = 0;            //ADC
 }
-myValues::myValues(int* info, int* ADC, int* PWM)
+
+void myValues::update(void)
 {
-    ModeEcran = info[0];
-    Status = info[1];
-    TempMoteur = ADC[0];
-    TempGenerateur = ADC[1];
-    VitesseMoteur = ADC[2];
-    VitesseGenerateur = ADC[3];
-    TensionMoteur = ADC[4];
-    TensionGenerateur = ADC[5];
-    Current = ADC[6];
-    FreqMoteur = PWM[0];
-    FreqGenerateur = PWM[1];
-    PWMMoteur = PWM[2];
-    PWMGenerateur = PWM[3];
+  this->VitesseMoteur = (26)*15767/4095;
+  this->TensionMoteur = analogRead(36)*44/6824;
+  this->TempMoteur = analogRead(25)*20/819;
+
+  this->Current = analogRead(2)/3276;
+  this->VitesseGenerateur = analogRead(12)*15767/4095;
+  this->TensionGenerateur = analogRead(15)*88/6825;
+  this->TempGenerateur = analogRead(13)*20/819;
+
+
 }
-
-
 
 Display::Display(void)
 {
@@ -158,4 +154,17 @@ break;
   }
   currentmode = mode;
   display.display();
+}
+
+
+MyTime::MyTime(void)
+{
+  Time = millis();
+  PidTime = 0;
+  DisplayTime = 0;
+}
+
+void MyTime::update(void)
+{
+  Time = millis();
 }
