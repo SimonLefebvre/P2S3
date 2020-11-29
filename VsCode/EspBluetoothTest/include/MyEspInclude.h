@@ -67,7 +67,7 @@ class Json
 
     Json();
     void SerialCheck(void);
-    void SerialSend(void);
+    void SerialSend(myValues myValues);
 };
 
 class MyTime
