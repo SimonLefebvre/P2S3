@@ -54,30 +54,36 @@ MainWindow::MainWindow(QWidget *parent):
 
     buckSlider.setRange(0, 100);
     buckSlider.setTickInterval(10);
+    buckSlider.setFixedHeight(32);
 
     buckSpinBox.setRange(0, 100);
     buckSpinBox.setSuffix("%");
 
     flybackSlider.setRange(0, 100);
     flybackSlider.setTickInterval(10);
+    flybackSlider.setFixedHeight(32);
 
     flybackSpinBox.setRange(0, 100);
     flybackSpinBox.setSuffix("%");
 
+    buckLabel.setObjectName("ControlLabel");
+    flybackLabel.setObjectName("ControlLabel");
+
+    controlModeLabel.setObjectName("ControlLabel");
+
     connect(&buckSlider, &QSlider::valueChanged, &buckSpinBox, &QSpinBox::setValue);
-    connect(&buckSlider, &QSlider::valueChanged, this, &MainWindow::motorValueChanged);
+    connect(&buckSlider, &QSlider::valueChanged, this, &MainWindow::motorControlChanged);
 
     connect(&flybackSlider, &QSlider::valueChanged, &flybackSpinBox, &QSpinBox::setValue);
-    connect(&flybackSlider, &QSlider::valueChanged, this, &MainWindow::chargerValueChanged);
+    connect(&flybackSlider, &QSlider::valueChanged, this, &MainWindow::chargerControlChanged);
 
     connect(&buckSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &buckSlider, &QSlider::setValue);
     connect(&flybackSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &flybackSlider, &QSlider::setValue);
 
     this->setCentralWidget(&mainWidget);
-
     this->resize(1020, 400);
 
-    motorRpmWidget.setValue(4400);
+    connect(&port, &QSerialPort::readyRead, this, &MainWindow::receiveSerialData);
 
     connectionTimer->setInterval(1000);
     connect(connectionTimer, &QTimer::timeout, this, &MainWindow::attemptSerialConnection);
@@ -101,7 +107,6 @@ void MainWindow::attemptSerialConnection()
                 port.setDataBits(QSerialPort::Data8);
                 port.setStopBits(QSerialPort::OneStop);
                 if (port.open(QIODevice::ReadWrite)) {
-                    connect(&port, &QSerialPort::readyRead, [&]{ std::cout << port.readAll().toStdString() << std::endl;});
                     std::cout << "Successfully connected to serial port " << it.portName().toStdString() << std::endl;
                 }
             }
@@ -114,6 +119,22 @@ void MainWindow::attemptSerialConnection()
         }
         port.close();
         std::cout << "Serial port disconnected" << std::endl;
+    }
+}
+
+void MainWindow::receiveSerialData()
+{
+    static const QMap<QString, uint16_t> infoTypeMap = {
+
+    };
+
+    QByteArray msg = port.readAll();
+    std::cout << msg.toStdString() << std::endl;
+
+    auto header = msg.left(1); // Change according to real header length
+
+    switch(infoTypeMap.value(header)){
+
     }
 }
 
@@ -141,7 +162,7 @@ void MainWindow::changeControls(bool pidMode)
     }
 }
 
-void MainWindow::motorValueChanged(int value)
+void MainWindow::motorControlChanged(int value)
 {
     if(controlModeButton.isChecked()){
         // PID Mode
@@ -151,7 +172,7 @@ void MainWindow::motorValueChanged(int value)
     }
 }
 
-void MainWindow::chargerValueChanged(int value)
+void MainWindow::chargerControlChanged(int value)
 {
     if(controlModeButton.isChecked()){
         // PID Mode

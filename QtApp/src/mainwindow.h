@@ -21,15 +21,18 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
+private slots:
     void attemptSerialConnection();
+
+    void receiveSerialData();
 
     void changeControls(bool pidMode);
 
-    void motorValueChanged(int value);
+    void motorControlChanged(int value);
 
-    void chargerValueChanged(int value);
+    void chargerControlChanged(int value);
 
+private:
     QVBoxLayout *vLayout;
     QHBoxLayout *hLayout;
 
