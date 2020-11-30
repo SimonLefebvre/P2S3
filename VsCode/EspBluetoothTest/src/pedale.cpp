@@ -51,7 +51,6 @@ Display::Display(void)
         display.drawStringMaxWidth(93, 32, 128,"C" );
         display.drawStringMaxWidth(93, 48, 128,"C" );
   display.display();
-  Serial.println("Display started");
   currentmode = 0;
 }
 

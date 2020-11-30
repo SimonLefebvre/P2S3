@@ -60,10 +60,26 @@
         cJSON_AddNumberToObject(JsonPWM,"PWM Generateur",myValues.PWMGenerateur);
 
         cJSON_AddItemToObject(root,"JsonInfo",JsonInfo);
-        cJSON_AddItemToObject(root,"JsonInfo",JsonADC);
-        cJSON_AddItemToObject(root,"JsonInfo",JsonPWM);
-
-        Serial.println("JSON:");
+        cJSON_AddItemToObject(root,"JsonADC",JsonADC);
+        cJSON_AddItemToObject(root,"JsonPWM",JsonPWM);
         Serial.print(cJSON_Print(root));
+        Serial.print('\0');
         cJSON_Delete(root);
+    }
+
+    void Json::SerialTest(myValues myValues)
+    {
+        cJSON *JsonADC = cJSON_CreateObject();
+        cJSON_AddNumberToObject(JsonADC,"Temp Moteur",myValues.TempMoteur);
+        cJSON_AddNumberToObject(JsonADC,"Temp Generateur",myValues.TempGenerateur);
+        cJSON_AddNumberToObject(JsonADC,"Vitesse Moteur",myValues.VitesseMoteur);
+        cJSON_AddNumberToObject(JsonADC,"Vitesse Generateur",myValues.VitesseGenerateur);
+        cJSON_AddNumberToObject(JsonADC,"Tension Moteur",myValues.TensionMoteur);
+        cJSON_AddNumberToObject(JsonADC,"Tension Generateur",myValues.TensionGenerateur);
+        cJSON_AddNumberToObject(JsonADC,"Courant Generateur",myValues.Current);
+        
+        Serial.print(cJSON_Print(JsonADC));
+        Serial.print('\0');
+        cJSON_Delete(JsonADC);
+
     }
