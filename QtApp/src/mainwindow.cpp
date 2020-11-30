@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent):
         QMainWindow(parent),
         vLayout(new QVBoxLayout()),
         hLayout(new QHBoxLayout()),
+        controlButtonLayout(new QHBoxLayout()),
         controlHLayout(new QHBoxLayout()),
         pwmVLayout(new QVBoxLayout()),
         buckHLayout(new QHBoxLayout()),
@@ -13,17 +14,30 @@ MainWindow::MainWindow(QWidget *parent):
         motorRpmWidget("Motor RPM", 4400),
         generatorRpmWidget("Generator RPM", 15400),
         connectionTimer(new QTimer()),
+        controlModeLabel("<b>PID Control "),
+        controlModeButton(QColor("#111C33"), QColor("#4D7DDD")),
         buckLabel("<b>PWM Convertisseur Moteur</b>"),
-        buckPwmSlider(Qt::Horizontal),
+        buckSlider(Qt::Horizontal),
         flybackLabel("<b>PWM Convertisseur Charge</b>"),
-        flybackPwmSlider(Qt::Horizontal)
+        flybackSlider(Qt::Horizontal)
 {
     mainWidget.setLayout(vLayout);
     hLayout->addWidget(&motorRpmWidget);
     hLayout->addWidget(&generatorRpmWidget);
 
     vLayout->addLayout(hLayout, 10);
+
+    vLayout->addLayout(controlButtonLayout);
     vLayout->addLayout(controlHLayout, 3);
+
+    controlButtonLayout->addWidget(&controlModeLabel);
+    controlButtonLayout->addWidget(&controlModeButton, 0);
+    controlButtonLayout->addStretch(10);
+
+    buckLabel.setFixedWidth(180);
+    flybackLabel.setFixedWidth(180);
+
+    connect(&controlModeButton, &SwitchButton::toggled, this, &MainWindow::changeControls);
 
     controlHLayout->addLayout(pwmVLayout);
 
@@ -31,28 +45,33 @@ MainWindow::MainWindow(QWidget *parent):
     pwmVLayout->addLayout(flybackHLayout);
 
     buckHLayout->addWidget(&buckLabel);
-    buckHLayout->addWidget(&buckPwmSlider);
-    buckHLayout->addWidget(&buckPwmSpinBox);
+    buckHLayout->addWidget(&buckSlider);
+    buckHLayout->addWidget(&buckSpinBox);
 
     flybackHLayout->addWidget(&flybackLabel);
-    flybackHLayout->addWidget(&flybackPwmSlider);
-    flybackHLayout->addWidget(&flybackPwmSpinBox);
+    flybackHLayout->addWidget(&flybackSlider);
+    flybackHLayout->addWidget(&flybackSpinBox);
 
-    buckPwmSlider.setRange(0, 100);
-    buckPwmSlider.setTickInterval(1);
+    buckSlider.setRange(0, 100);
+    buckSlider.setTickInterval(10);
 
-    buckPwmSpinBox.setRange(0, 100);
+    buckSpinBox.setRange(0, 100);
+    buckSpinBox.setSuffix("%");
 
-    flybackPwmSlider.setRange(0, 100);
-    flybackPwmSlider.setTickInterval(1);
+    flybackSlider.setRange(0, 100);
+    flybackSlider.setTickInterval(10);
 
-    flybackPwmSpinBox.setRange(0, 100);
+    flybackSpinBox.setRange(0, 100);
+    flybackSpinBox.setSuffix("%");
 
-    connect(&buckPwmSlider, &QSlider::valueChanged, &buckPwmSpinBox, &QSpinBox::setValue);
-    connect(&flybackPwmSlider, &QSlider::valueChanged, &flybackPwmSpinBox, &QSpinBox::setValue);
+    connect(&buckSlider, &QSlider::valueChanged, &buckSpinBox, &QSpinBox::setValue);
+    connect(&buckSlider, &QSlider::valueChanged, this, &MainWindow::motorValueChanged);
 
-    connect(&buckPwmSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &buckPwmSlider, &QSlider::setValue);
-    connect(&flybackPwmSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &flybackPwmSlider, &QSlider::setValue);
+    connect(&flybackSlider, &QSlider::valueChanged, &flybackSpinBox, &QSpinBox::setValue);
+    connect(&flybackSlider, &QSlider::valueChanged, this, &MainWindow::chargerValueChanged);
+
+    connect(&buckSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &buckSlider, &QSlider::setValue);
+    connect(&flybackSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &flybackSlider, &QSlider::setValue);
 
     this->setCentralWidget(&mainWidget);
 
@@ -95,6 +114,50 @@ void MainWindow::attemptSerialConnection()
         }
         port.close();
         std::cout << "Serial port disconnected" << std::endl;
+    }
+}
+
+void MainWindow::changeControls(bool pidMode)
+{
+    if(pidMode) {
+        buckLabel.setText("<b>Setpoint RPM Moteur</b>");
+        flybackLabel.setText("<b>Setpoint Courant de charge</b>");
+        buckSlider.setRange(0, 4400);
+        buckSpinBox.setRange(0, 4400);
+        flybackSlider.setRange(0, 1000);
+        flybackSpinBox.setRange(0, 1000);
+        buckSpinBox.setSuffix(" RPM");
+        flybackSpinBox.setSuffix(" mA");
+    }
+    else{
+        buckLabel.setText("<b>PWM Convertisseur Moteur</b>");
+        flybackLabel.setText("<b>PWM Convertisseur Charge</b>");
+        buckSlider.setRange(0, 100);
+        buckSpinBox.setRange(0, 100);
+        flybackSlider.setRange(0, 100);
+        flybackSpinBox.setRange(0, 100);
+        buckSpinBox.setSuffix("%");
+        flybackSpinBox.setSuffix("%");
+    }
+}
+
+void MainWindow::motorValueChanged(int value)
+{
+    if(controlModeButton.isChecked()){
+        // PID Mode
+    }
+    else{
+        // PWM Mode
+    }
+}
+
+void MainWindow::chargerValueChanged(int value)
+{
+    if(controlModeButton.isChecked()){
+        // PID Mode
+    }
+    else{
+        // PWM Mode
     }
 }
 

@@ -11,6 +11,7 @@
 #include <QLabel>
 
 #include "CircularGaugeWidget.h"
+#include "SwitchButton.h"
 
 class MainWindow : public QMainWindow
 {
@@ -23,9 +24,16 @@ public:
 private:
     void attemptSerialConnection();
 
+    void changeControls(bool pidMode);
+
+    void motorValueChanged(int value);
+
+    void chargerValueChanged(int value);
+
     QVBoxLayout *vLayout;
     QHBoxLayout *hLayout;
 
+    QHBoxLayout *controlButtonLayout;
     QHBoxLayout *controlHLayout;
 
     QVBoxLayout *pwmVLayout;
@@ -41,13 +49,16 @@ private:
     QSerialPort port;
     QTimer *connectionTimer;
 
+    QLabel controlModeLabel;
+    SwitchButton controlModeButton;
+
     QLabel buckLabel;
-    QSlider buckPwmSlider;
-    QSpinBox buckPwmSpinBox;
+    QSlider buckSlider;
+    QSpinBox buckSpinBox;
 
     QLabel flybackLabel;
-    QSlider flybackPwmSlider;
-    QSpinBox flybackPwmSpinBox;
+    QSlider flybackSlider;
+    QSpinBox flybackSpinBox;
 
 
 };
