@@ -6,6 +6,9 @@
 #include <QHBoxLayout>
 #include <QSerialPort>
 #include <QTimer>
+#include <QSlider>
+#include <QSpinBox>
+#include <QLabel>
 
 #include "CircularGaugeWidget.h"
 
@@ -23,6 +26,13 @@ private:
     QVBoxLayout *vLayout;
     QHBoxLayout *hLayout;
 
+    QHBoxLayout *controlHLayout;
+
+    QVBoxLayout *pwmVLayout;
+
+    QHBoxLayout *buckHLayout;
+    QHBoxLayout *flybackHLayout;
+
     QWidget mainWidget;
 
     CircularGaugeWidget motorRpmWidget;
@@ -30,6 +40,15 @@ private:
 
     QSerialPort port;
     QTimer *connectionTimer;
+
+    QLabel buckLabel;
+    QSlider buckPwmSlider;
+    QSpinBox buckPwmSpinBox;
+
+    QLabel flybackLabel;
+    QSlider flybackPwmSlider;
+    QSpinBox flybackPwmSpinBox;
+
 
 };
 #endif // MAINWINDOW_H
