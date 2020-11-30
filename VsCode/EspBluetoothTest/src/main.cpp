@@ -8,6 +8,7 @@ void setup() {
 
 void loop() 
 {
+  delay(100);
   MyTime t;
   myValues myValues;
   myValues.update();
@@ -15,6 +16,7 @@ void loop()
   Display Display;
   Motor m;
   Generator g;
+  j.SerialSend(myValues);
 
 
   while(1)

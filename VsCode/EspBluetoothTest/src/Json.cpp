@@ -42,26 +42,28 @@
         cJSON *JsonInfo = cJSON_CreateObject();
         cJSON *JsonADC = cJSON_CreateObject();
         cJSON *JsonPWM = cJSON_CreateObject();
+
+        cJSON_AddNumberToObject(JsonInfo,"Mode Ecran",0);
+        cJSON_AddNumberToObject(JsonInfo,"Status",0);
+
+        cJSON_AddNumberToObject(JsonADC,"Temp Moteur",myValues.TempMoteur);
+        cJSON_AddNumberToObject(JsonADC,"Temp Generateur",myValues.TempGenerateur);
+        cJSON_AddNumberToObject(JsonADC,"Vitesse Moteur",myValues.VitesseMoteur);
+        cJSON_AddNumberToObject(JsonADC,"Vitesse Generateur",myValues.VitesseGenerateur);
+        cJSON_AddNumberToObject(JsonADC,"Tension Moteur",myValues.TensionMoteur);
+        cJSON_AddNumberToObject(JsonADC,"Tension Generateur",myValues.TensionGenerateur);
+        cJSON_AddNumberToObject(JsonADC,"Courant Generateur",myValues.Current);
+
+        cJSON_AddNumberToObject(JsonPWM,"Freq Moteur",myValues.FreqMoteur);
+        cJSON_AddNumberToObject(JsonPWM,"Freq Generateur",myValues.FreqGenerateur);
+        cJSON_AddNumberToObject(JsonPWM,"PWM Moteur",myValues.PWMMoteur);
+        cJSON_AddNumberToObject(JsonPWM,"PWM Generateur",myValues.PWMGenerateur);
+
         cJSON_AddItemToObject(root,"JsonInfo",JsonInfo);
         cJSON_AddItemToObject(root,"JsonInfo",JsonADC);
         cJSON_AddItemToObject(root,"JsonInfo",JsonPWM);
 
-        cJSON_AddNumberToObject(JsonInfo,0,"Mode Ecran");
-        cJSON_AddNumberToObject(JsonInfo,0,"Status");
-
-        cJSON_AddNumberToObject(JsonADC,myValues.TempMoteur,"Temp Moteur");
-        cJSON_AddNumberToObject(JsonADC,myValues.TempGenerateur,"Temp Generateur");
-        cJSON_AddNumberToObject(JsonADC,myValues.VitesseMoteur,"Vitesse Moteur");
-        cJSON_AddNumberToObject(JsonADC,myValues.VitesseGenerateur,"Vitesse Generateur");
-        cJSON_AddNumberToObject(JsonADC,myValues.TensionMoteur,"Tension Moteur");
-        cJSON_AddNumberToObject(JsonADC,myValues.TensionGenerateur,"Tension Generateur");
-        cJSON_AddNumberToObject(JsonADC,myValues.Current,"Courant Generateur");
-
-        cJSON_AddNumberToObject(JsonPWM,myValues.FreqMoteur,"Freq Moteur");
-        cJSON_AddNumberToObject(JsonPWM,myValues.FreqGenerateur,"Freq Generateur");
-        cJSON_AddNumberToObject(JsonPWM,myValues.PWMMoteur,"PWM Moteur");
-        cJSON_AddNumberToObject(JsonPWM,myValues.PWMGenerateur,"PWM Generateur");
-
+        Serial.println("JSON:");
         Serial.print(cJSON_Print(root));
         cJSON_Delete(root);
     }
