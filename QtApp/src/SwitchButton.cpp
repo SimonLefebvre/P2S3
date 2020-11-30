@@ -19,7 +19,8 @@ SwitchButton::SwitchButton(QColor thumbColor, QColor trackColor, QWidget *parent
     QAbstractButton::setCheckable(true);
 }
 
-void SwitchButton::paintEvent(QPaintEvent *e) {
+void SwitchButton::paintEvent(QPaintEvent *e)
+{
     (void) e;
     QPainter p(this);
     p.setPen(Qt::NoPen);
@@ -39,27 +40,39 @@ void SwitchButton::paintEvent(QPaintEvent *e) {
     p.drawEllipse(QRectF(offset() - (_height / 2), y - (_height / 2), height(), height()));
 }
 
-void SwitchButton::mouseReleaseEvent(QMouseEvent *e) {
+void SwitchButton::mouseReleaseEvent(QMouseEvent *e)
+{
     if (e->button() & Qt::LeftButton) {
         toggle();
     }
 }
 
-void SwitchButton::enterEvent(QEvent *e) {
+void SwitchButton::enterEvent(QEvent *e)
+{
     setCursor(Qt::PointingHandCursor);
     QAbstractButton::enterEvent(e);
 }
 
-QSize SwitchButton::sizeHint() const {
+QSize SwitchButton::sizeHint() const
+{
     return QSize(2 * (_height + margin), _height + 2 * margin);
 }
 
-int SwitchButton::offset() {
+int SwitchButton::offset()
+{
     return x;
 }
-void SwitchButton::setOffset(int o) {
+void SwitchButton::setOffset(int o)
+{
     x = o;
     update();
+}
+
+void SwitchButton::setHeight(int height)
+{
+    _height = height;
+    setOffset(_height / 2);
+    y = offset();
 }
 
 void SwitchButton::setChecked(bool checked)

@@ -18,6 +18,8 @@ public:
 
     void setOffset(int o);
 
+    void setHeight(int height);
+
     void setChecked(bool checked);
 
     void toggle();

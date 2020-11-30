@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent):
     controlButtonLayout->addWidget(&controlModeButton, 0);
     controlButtonLayout->addStretch(10);
 
+    controlModeButton.setHeight(28);
+
     buckLabel.setFixedWidth(180);
     flybackLabel.setFixedWidth(180);
 
