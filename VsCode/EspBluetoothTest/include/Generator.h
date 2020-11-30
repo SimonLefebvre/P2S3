@@ -18,6 +18,10 @@ class Generator
 
         // c - Current from MIN_CURRENT to MAX_CURRENT
         bool setCurrent(float c);
+
+        // d - Duty from MIN_DUTY to MAX_DUTY
+        bool setDuty(float d);
+        
         void calibrateCurrent(void);
 
         const float readCurrent();
@@ -34,9 +38,6 @@ class Generator
         float Current;
 
         PID *pid;
-
-        // d - Duty from MIN_DUTY to MAX_DUTY
-        bool setDuty(float d);
 };
 
 #endif

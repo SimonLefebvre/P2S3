@@ -18,6 +18,10 @@ class Motor
 
         // s - Speed from MIN_SPEED to MAX_SPEED
         bool setSpeed(float s);
+
+        // d - Duty from MIN_DUTY to MAX_DUTY
+        bool setDuty(float d);
+        
         void calibrateSpeed(void);
 
         const float readSpeed();
@@ -32,9 +36,6 @@ class Motor
         float Vout;
 
         PID *pid;
-
-        // d - Duty from MIN_DUTY to MAX_DUTY
-        bool setDuty(float d);
 };
 
 #endif
