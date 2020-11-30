@@ -9,12 +9,12 @@ Motor::Motor()
     ledcSetup(0,Frequency,8);
     ledcWrite(0,Duty);
 
-    pid = new PID(0.01, MAX_SPEED, MIN_SPEED, 10, 0, 0);
+    pid = new PID(0.1, MAX_SPEED, MIN_SPEED, 10, 0, 0);
 }
 
 Motor::~Motor() 
 {
-
+    delete pid;
 }
 
 bool Motor::setSpeed(float s)
