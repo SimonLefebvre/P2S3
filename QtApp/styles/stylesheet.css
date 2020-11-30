@@ -95,3 +95,55 @@ QSlider::handle:horizontal:disabled {
     border: 1px solid #aaa;
     border-radius: 4px;
 }
+
+QSpinBox {
+    color: #646464;
+    border: 1px solid #CCCACC;
+    border-radius: 7%;
+    padding: 1px 3px 1px 3px;
+    min-height: 18px;
+}
+
+QSpinBox::up-button {
+    left: -2px;
+    bottom: -1px;
+    border: none;
+    background-color: transparent;
+
+    subcontrol-origin: margin;
+    subcontrol-position: top right;
+    position: relative;
+}
+
+QSpinBox::up-arrow {
+    image: url(styles/up-arrow.png);
+
+    width: 10px;
+    height: 10px;
+}
+
+QSpinBox::down-button{
+    border: none;
+    background-color: transparent;
+    left: -2px;
+    top: -1px;
+
+    subcontrol-origin: margin;
+    subcontrol-position: bottom right;
+    position: relative;
+}
+
+QSpinBox::down-arrow{
+    image: url(styles/down-arrow.png);
+
+    width: 10px;
+    height: 10px;
+}
+
+QSpinBox#SmallText {
+    font: 8pt 'Montserrat';
+}
+
+QSpinBox#MediumText {
+    font: 10pt 'Montserrat';
+}
