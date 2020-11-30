@@ -34,10 +34,11 @@ MainWindow::MainWindow(QWidget *parent):
     controlButtonLayout->addWidget(&controlModeButton, 0);
     controlButtonLayout->addStretch(10);
 
-    controlModeButton.setHeight(28);
+    controlModeButton.setHeight(32);
 
-    buckLabel.setFixedWidth(180);
-    flybackLabel.setFixedWidth(180);
+    QFontMetrics fm(buckLabel.font());
+    buckLabel.setFixedWidth(fm.horizontalAdvance(flybackLabel.text()));
+    flybackLabel.setFixedWidth(fm.horizontalAdvance(flybackLabel.text()));
 
     connect(&controlModeButton, &SwitchButton::toggled, this, &MainWindow::changeControls);
 
@@ -68,11 +69,6 @@ MainWindow::MainWindow(QWidget *parent):
     flybackSpinBox.setRange(0, 100);
     flybackSpinBox.setSuffix("%");
 
-    buckLabel.setObjectName("ControlLabel");
-    flybackLabel.setObjectName("ControlLabel");
-
-    controlModeLabel.setObjectName("ControlLabel");
-
     connect(&buckSlider, &QSlider::valueChanged, &buckSpinBox, &QSpinBox::setValue);
     connect(&buckSlider, &QSlider::valueChanged, this, &MainWindow::motorControlChanged);
 
@@ -83,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(&flybackSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &flybackSlider, &QSlider::setValue);
 
     this->setCentralWidget(&mainWidget);
-    this->resize(1020, 400);
+    this->resize(1520, 700);
 
     connect(&port, &QSerialPort::readyRead, this, &MainWindow::receiveSerialData);
 
@@ -126,7 +122,15 @@ void MainWindow::attemptSerialConnection()
 
 void MainWindow::receiveSerialData()
 {
-    static const QMap<QString, uint16_t> infoTypeMap = {
+    enum infoType{
+        MotorRPM,
+        ChargerRPM,
+        BuckVoltage,
+        FlybackVoltage,
+        BuckTemperature,
+        FlybackTemperature
+    };
+    static const QMap<QString, infoType> infoTypeMap = {
 
     };
 
@@ -136,7 +140,24 @@ void MainWindow::receiveSerialData()
     auto header = msg.left(1); // Change according to real header length
 
     switch(infoTypeMap.value(header)){
+        case MotorRPM:
 
+            break;
+        case ChargerRPM:
+
+            break;
+        case BuckVoltage:
+
+            break;
+        case FlybackVoltage:
+
+            break;
+        case BuckTemperature:
+
+            break;
+        case FlybackTemperature:
+
+            break;
     }
 }
 
