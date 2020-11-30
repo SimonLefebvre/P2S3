@@ -12,7 +12,6 @@ void loop()
   Display Display;
   Motor m;
   Generator g;
-<<<<<<< Updated upstream
   PID *pid;
 
   float Duty;
@@ -25,8 +24,6 @@ void loop()
   char ch;
 
   pid = new PID(0.1, MAX_SPEED, MIN_SPEED, kp, ki, kd);
-=======
->>>>>>> Stashed changes
 
   while(1)
   {
@@ -60,9 +57,7 @@ void loop()
         Serial.print(kp);
       }
 
-<<<<<<< Updated upstream
       pid = new PID(0.1, MAX_SPEED, MIN_SPEED, kp, ki, kd);
-=======
     if(t.Time > t.DisplayTime)
     {
       t.DisplayTime = t.Time + 1000;
@@ -70,7 +65,6 @@ void loop()
       myValues.update();
       //j.SerialSend(myValues);
       j.SerialTest(myValues);
->>>>>>> Stashed changes
     }
 
   }
