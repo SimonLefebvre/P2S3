@@ -37,20 +37,23 @@ void Motor::calibrateSpeed(void)
 
 bool Motor::setDuty(float d)
 {
-    if( MIN_DUTY<0 || MAX_DUTY>100 )
-    {
-        return false;
-    }
-
-    Duty = d/100;
-    ledcWrite(0,Duty);
+ 
+    ledcWrite(0,d*255);
 
     return true;
 }
 
 const float Motor::readSpeed()
 {
-    return (float)analogRead(26)*15767/4095;
+
+    float reading = analogRead(26);
+    //Serial.print("\tADCd:");
+    //Serial.print(reading);
+    reading = reading*0.018;
+    //Serial.print("\tADCa:");
+    //Serial.print(reading);//*0.0142857);//0.011550671*1.2);
+    reading = reading*333.3333;    
+    return (float)reading;//analogRead(26)*(15767/4095)*1.3;
 }
 
 const float Motor::readVout()

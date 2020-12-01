@@ -14,7 +14,17 @@
 #include "Motor.h"
 #include "Generator.h"
 
+class myPID
+{
+    private:
 
+    public:
+
+    myPID(void);
+    float updateMotor(float kp, float ki, float kd, int MAXSPEED, int SpeedLive, int SpeedSet, int Delay, float PWMLive);
+    float updateGenerator(float kp, float ki, float kd, int MaxVoltage, int VoltageLive, int VoltageSet, int Delay, float PWMLive);
+
+};
 class myValues
 {
     public:

@@ -167,3 +167,68 @@ void MyTime::update(void)
 {
   Time = millis();
 }
+
+
+myPID::myPID(void)
+{
+
+
+}
+
+
+float myPID::updateMotor(float kp, float ki, float kd, int MAXSPEED, int SpeedLive, int SpeedSet, int Delay, float PWMLive)
+{
+  float PwmPutPut =PWMLive;
+  int speedDif = SpeedLive - SpeedSet;
+  PwmPutPut -= (float)speedDif/(float)MAXSPEED * (1+kp);
+
+
+  float PWShouldBe = (float)SpeedSet/(float)MAXSPEED;
+  PwmPutPut -= (PWShouldBe-PwmPutPut)*(ki);
+
+/*
+    Serial.print("\tki:");
+  Serial.print((PWShouldBe-PwmPutPut)*(1+ki));
+*/
+  if(PwmPutPut > 1)
+  {
+    PwmPutPut=1;
+    //Serial.print("putput >1");
+  }
+  else if(PwmPutPut < 0)
+  {
+    PwmPutPut=0;
+    //Serial.print("putput <0");
+  }
+
+return PwmPutPut;
+}
+
+
+
+float myPID::updateGenerator(float kp, float ki, float kd, int MaxVoltage, int VoltageLive, int VoltageSet, int Delay, float PWMLive)
+{
+  float PwmPutPut = PWMLive;
+  int VoltDif = VoltageLive - VoltageSet;
+  PwmPutPut += (float)VoltDif/(float)MaxVoltage * (kp);
+
+
+  float PWShouldBe = (float)VoltageSet/(float)MaxVoltage;
+  PwmPutPut += (PWShouldBe-PwmPutPut)*(ki);
+
+/*
+    Serial.print("\tki:");
+  Serial.print((PWShouldBe-PwmPutPut)*(1+ki));
+*/
+  if(PwmPutPut > 1)
+  {
+    PwmPutPut=1;
+    //Serial.print("putput >1");
+  }
+  else if(PwmPutPut < 0.5)
+  {
+    PwmPutPut=0.5;
+    //Serial.print("putput <0");
+  }
+    return PwmPutPut;
+}

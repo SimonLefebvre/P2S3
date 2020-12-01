@@ -37,13 +37,8 @@ void Generator::calibrateCurrent(void)
 
 bool Generator::setDuty(float d)
 {
-    if( MIN_DUTY<0 || MAX_DUTY>100 )
-    {
-        return false;
-    }
-
-    Duty = d/100;
-    ledcWrite(0,Duty);
+    
+    ledcWrite(1,d*255);
 
     return true;
 }
