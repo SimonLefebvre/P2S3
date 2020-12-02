@@ -33,8 +33,6 @@ class Generator
 
         int Frequency;
         float Duty;
-        float Speed;
-        float Vout;
         float Current;
 
         PID *pid;

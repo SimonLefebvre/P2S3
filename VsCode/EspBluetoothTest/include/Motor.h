@@ -33,7 +33,6 @@ class Motor
         int Frequency;
         float Duty;
         float Speed;
-        float Vout;
 
         PID *pid;
 };
