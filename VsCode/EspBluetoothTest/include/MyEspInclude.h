@@ -22,7 +22,7 @@ class myPID
 
     myPID(void);
     float updateMotor(float kp, float ki, float kd, int MAXSPEED, int SpeedLive, int SpeedSet, int Delay, float PWMLive);
-    float updateGenerator(float kp, float ki, float kd, int MaxVoltage, int VoltageLive, int VoltageSet, int Delay, float PWMLive);
+    float updateGenerator(float kp, float ki, float kd, float MaxCurrent, int CurrentLive, int CurrentSet, int Delay, float PWMLive);
 
 };
 class myValues

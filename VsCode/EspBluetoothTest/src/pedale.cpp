@@ -206,14 +206,14 @@ return PwmPutPut;
 
 
 
-float myPID::updateGenerator(float kp, float ki, float kd, int MaxVoltage, int VoltageLive, int VoltageSet, int Delay, float PWMLive)
+float myPID::updateGenerator(float kp, float ki, float kd, float MaxCurrent, int CurrentLive, int CurrentSet, int Delay, float PWMLive)
 {
   float PwmPutPut = PWMLive;
-  int VoltDif = VoltageLive - VoltageSet;
-  PwmPutPut += (float)VoltDif/(float)MaxVoltage * (kp);
+  int VoltDif = CurrentLive - CurrentSet;
+  PwmPutPut += (float)VoltDif/(float)MaxCurrent * (kp);
 
 
-  float PWShouldBe = (float)VoltageSet/(float)MaxVoltage;
+  float PWShouldBe = (float)CurrentSet/(float)MaxCurrent;
   PwmPutPut += (PWShouldBe-PwmPutPut)*(ki);
 
 /*

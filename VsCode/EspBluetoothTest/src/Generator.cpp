@@ -5,7 +5,7 @@ Generator::Generator()
     Frequency = 100000;
     Duty = 0;
 
-    ledcAttachPin(14,1);
+    ledcAttachPin(13,1);
     ledcSetup(1,Frequency,8);
     ledcWrite(1,Duty);
 
@@ -31,7 +31,7 @@ bool Generator::setCurrent(float c)
 
 void Generator::calibrateCurrent(void)
 {
-    Duty = (pid->calculate(Speed, readCurrent())/MAX_CURRENT)*100;
+    Duty = (pid->calculate(Current, readCurrent())/MAX_CURRENT)*100;
     setDuty(Duty);
 }
 
@@ -45,12 +45,21 @@ bool Generator::setDuty(float d)
 
 const float Generator::readCurrent()
 {
-    return (float)analogRead(2)/3276;
+    float adc = (float) analogRead(2);
+    //Serial.print(adc);
+    return (float)adc*(3.3f/4096.0f)/(0.022 * 120);
 }
 
 const float Generator::readSpeed()
 {
-    return (float)analogRead(12)*15767/4095;
+       float reading = analogRead(12);
+    //Serial.print("\tADCd:");
+    //Serial.print(reading);
+    reading = reading*0.018;
+    //Serial.print("\tADCa:");
+    //Serial.print(reading);//*0.0142857);//0.011550671*1.2);
+    reading = reading*333.3333;    
+    return (float)reading;//analogRead(26)*(15767/4095)*1.3;
 }
 
 const float Generator::readVout()
