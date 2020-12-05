@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include <iostream>
 #include <QSerialPortInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 MainWindow::MainWindow(QWidget *parent):
         QMainWindow(parent),
@@ -58,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent):
     buckSlider.setRange(0, 100);
     buckSlider.setTickInterval(10);
     buckSlider.setFixedHeight(32);
+    buckSlider.setTracking(false);
 
     buckSpinBox.setRange(0, 100);
     buckSpinBox.setSuffix("%");
@@ -65,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent):
     flybackSlider.setRange(0, 100);
     flybackSlider.setTickInterval(10);
     flybackSlider.setFixedHeight(32);
+    flybackSlider.setTracking(false);
 
     flybackSpinBox.setRange(0, 100);
     flybackSpinBox.setSuffix("%");
@@ -106,6 +110,8 @@ void MainWindow::attemptSerialConnection()
                 port.setStopBits(QSerialPort::OneStop);
                 if (port.open(QIODevice::ReadWrite)) {
                     std::cout << "Successfully connected to serial port " << it.portName().toStdString() << std::endl;
+                    buckSlider.setValue(0);
+                    flybackSlider.setValue(0);
                 }
             }
         }
@@ -122,42 +128,46 @@ void MainWindow::attemptSerialConnection()
 
 void MainWindow::receiveSerialData()
 {
-    enum infoType{
-        MotorRPM,
-        ChargerRPM,
-        BuckVoltage,
-        FlybackVoltage,
-        BuckTemperature,
-        FlybackTemperature
+    enum InfoId{
+        Motor_RPM = 1,
+        Generator_RPM,
+        Buck_Temperature,
+        Flyback_Temperature,
+        Buck_Voltage,
+        Flyback_Voltage
     };
-    static const QMap<QString, infoType> infoTypeMap = {
-
-    };
-
-    QByteArray msg = port.readAll();
-    std::cout << msg.toStdString() << std::endl;
-
-    auto header = msg.left(1); // Change according to real header length
-
-    switch(infoTypeMap.value(header)){
-        case MotorRPM:
-
-            break;
-        case ChargerRPM:
-
-            break;
-        case BuckVoltage:
-
-            break;
-        case FlybackVoltage:
-
-            break;
-        case BuckTemperature:
-
-            break;
-        case FlybackTemperature:
-
-            break;
+    while(port.bytesAvailable()) {
+        auto c = port.read(1);
+        if(c.front() != '\0') {
+            msg.append(c);
+        }
+        else{
+            std::cout << msg.toStdString() << std::endl;
+            uint8_t id = static_cast<uint8_t>(msg.front()) - 0x30;
+            msg.remove(0, 1);
+            switch(id)
+            {
+                case Motor_RPM:
+                    motorRpmWidget.setValue(QString(msg).toUInt());
+                    break;
+                case Generator_RPM:
+                    generatorRpmWidget.setValue(QString(msg).toUInt());
+                    break;
+                case Buck_Temperature:
+                    // TODO
+                    break;
+                case Flyback_Temperature:
+                    // TODO
+                    break;
+                case Buck_Voltage:
+                    // TODO
+                    break;
+                case Flyback_Voltage:
+                    // TODO
+                    break;
+            }
+            msg.clear();
+        }
     }
 }
 
@@ -189,9 +199,20 @@ void MainWindow::motorControlChanged(int value)
 {
     if(controlModeButton.isChecked()){
         // PID Mode
+        QJsonObject obj
+                {
+                        {"Vitesse Moteur", value}
+                };
+        QJsonDocument doc(obj);
+        port.write(doc.toJson());
     }
     else{
         // PWM Mode
+        QString str = 'a' + QString::number(value) + '\0';
+
+        port.write(str.toUtf8());
+
+        std::cout << "String sent: " << str.toStdString() << std::endl;
     }
 }
 
@@ -202,6 +223,11 @@ void MainWindow::chargerControlChanged(int value)
     }
     else{
         // PWM Mode
+        QString str = 'b' + QString::number(value) + '\0';
+
+        port.write(str.toUtf8());
+
+        std::cout << "String sent: " << str.toStdString() << std::endl;
     }
 }
 

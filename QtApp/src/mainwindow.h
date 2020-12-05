@@ -63,6 +63,6 @@ private:
     QSlider flybackSlider;
     QSpinBox flybackSpinBox;
 
-
+    QByteArray msg;
 };
 #endif // MAINWINDOW_H
